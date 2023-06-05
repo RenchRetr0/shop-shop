@@ -1,0 +1,49 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateUserDto } from '@user/dto/create-user.dto';
+import { User } from '@user/entities/user.entity';
+import { UserWithCurrentEmailAlreadyExists } from '@user/errors/user-with-current-email-exists.error';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
+
+@Injectable()
+export class UserService
+{
+    constructor (
+        @InjectRepository(User) private userRepository: Repository<User>
+    ) {}
+
+    async createUser(createUserDto: CreateUserDto): Promise<User> {
+        const existsWithCurrentEmail = await this._emailExists(createUserDto.email);
+        if (existsWithCurrentEmail) {
+            throw new UserWithCurrentEmailAlreadyExists(createUserDto.email);
+        }
+        const user: User = User.create({
+            email: createUserDto.email,
+            password: createUserDto.password,
+        });
+        return await this.userRepository.save(user);
+    }
+
+    async findOneByEmail(email: string): Promise<User> {
+        return await this.userRepository.findOne({
+          where: { email: Like(`%${email}%`) },
+        });
+    }
+
+    async findOne(userFilterQuery: FindOptionsWhere<User>): Promise<User> {
+        return await this.userRepository.findOne({
+          where: userFilterQuery,
+          relations: { profile: true },
+        });
+    }
+
+    async _profileUserUpdate(id: number, profile): Promise<void>
+    {
+        await this.userRepository
+            .update({ id }, {profile: profile});
+    }
+
+    private async _emailExists(email: string): Promise<boolean> {
+        return !!(await this.userRepository.countBy({ email: Like(`%${email}%`) }));
+    }
+}
