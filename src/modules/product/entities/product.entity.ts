@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ProductProperties } from "../interfaces/product.interface";
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { Category } from "@category/entities/category.entity";
@@ -35,7 +35,7 @@ export class Product extends BaseEntity implements ProductProperties
     description: string;
 
     @Type(() => Category)
-    @OneToOne(() => Category)
+    @ManyToOne(() => Category)
     @JoinColumn()
     category: Category;
 

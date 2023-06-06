@@ -4,11 +4,13 @@ import {
     FileTypeValidator, 
     Get, 
     MaxFileSizeValidator, 
+    Param, 
     ParseFilePipe, 
     Post, 
     UploadedFile, 
     UseGuards, 
-    UseInterceptors 
+    UseInterceptors,
+    Res
 } from '@nestjs/common';
 import { ProductService } from './service/product.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -19,6 +21,10 @@ import { RolesDecorator } from '../auth/roles.decorator';
 import { Roles } from '@common/enums/roles.enum';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
+import { FindByCategoryDto } from './dto/findByCategory.dto';
+import { join } from 'path';
+import { of } from 'rxjs';
+import { FindByProductIdDto } from './dto/findByProductId.dto';
 
 @Controller('product')
 export class ProductController {
@@ -48,10 +54,9 @@ export class ProductController {
         file: Express.Multer.File,
         @Body() createProductDto: CreateProductDto,
       ): Promise<Product> {
-
         return await this.productService.create(
-            createProductDto,
-            file.filename,
+          createProductDto,
+          file.filename,
         );
     }
 
@@ -59,5 +64,20 @@ export class ProductController {
     async findAll(): Promise<Product[]>
     {
         return await this.productService.findAll();
+    }
+
+    @Get('felter/:categoryName')
+    async findProduct(@Param() { name }: FindByCategoryDto): Promise<Product[]>
+    {
+      return this.productService.findByCategory(name);
+    }
+
+    @Get(':productid')
+    async findOne(@Param() { productid }: FindByProductIdDto, @Res() res)
+    {
+      const id = +productid;
+      // const product = await this.productService.findById(id);
+      // return of(res.sendFile(join(process.cwd(), 'uploads/'+ product.link)));
+      return await this.productService.findById(id);
     }
 }
