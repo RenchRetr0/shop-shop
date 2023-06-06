@@ -21,6 +21,7 @@
       "@common/*": ["src/common/*"],
       "@user/*": ["src/modules/user/*"],
       "@profile/*": ["src/modules/profile/*"],
+      "@category/*": ["src/modules/category/*"],
     }
   }
 }
