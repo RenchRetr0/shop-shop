@@ -28,7 +28,7 @@ export class ProductService
             category,
             count: +createProductDto.count,
             price: +createProductDto.price,
-            link: photoUrl
+            link: `http://localhost:5000/uploads/${photoUrl}`
         });
 
         return await this.productRepository.save(product);

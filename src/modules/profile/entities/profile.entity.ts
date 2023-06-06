@@ -20,7 +20,7 @@ import { ProfileProperties } from '../interfaces/profile.interface';
 export class Profile extends BaseEntity implements ProfileProperties {
   @IsNotEmpty()
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @IsNotEmpty()
   @IsString()

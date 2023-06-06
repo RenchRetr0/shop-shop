@@ -15,7 +15,6 @@ import {
     CreateDateColumn,
     Entity,
     JoinColumn,
-    OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,

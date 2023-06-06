@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { ProductModule } from './modules/product/product.module';
 import { CategoryModule } from './modules/category/category.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { CategoryModule } from './modules/category/category.module';
     AuthModule,
     ProfileModule,
     ProductModule,
-    CategoryModule
+    CategoryModule,
+    OrderModule
   ],
   controllers: [],
   providers: [],

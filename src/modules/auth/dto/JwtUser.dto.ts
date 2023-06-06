@@ -1,6 +1,6 @@
 import { Roles } from '@common/enums/roles.enum';
 
 export class JwtUserDto {
-  userId: string;
+  userId: number;
   role: Roles;
 }

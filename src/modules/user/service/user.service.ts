@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Profile } from '@profile/entities/profile.entity';
 import { CreateUserDto } from '@user/dto/create-user.dto';
 import { User } from '@user/entities/user.entity';
 import { UserWithCurrentEmailAlreadyExists } from '@user/errors/user-with-current-email-exists.error';
+import { profile } from 'console';
 import { FindOptionsWhere, Like, Repository } from 'typeorm';
 
 @Injectable()
@@ -45,5 +47,10 @@ export class UserService
 
     private async _emailExists(email: string): Promise<boolean> {
         return !!(await this.userRepository.countBy({ email: Like(`%${email}%`) }));
+    }
+
+    async _returProfiel(id: number): Promise<Profile>
+    {
+        return (await this.userRepository.findOne({where: {id: id}, relations: { profile: true }})).profile;
     }
 }

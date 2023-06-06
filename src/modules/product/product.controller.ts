@@ -22,8 +22,6 @@ import { Roles } from '@common/enums/roles.enum';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
 import { FindByCategoryDto } from './dto/findByCategory.dto';
-import { join } from 'path';
-import { of } from 'rxjs';
 import { FindByProductIdDto } from './dto/findByProductId.dto';
 
 @Controller('product')
@@ -76,8 +74,6 @@ export class ProductController {
     async findOne(@Param() { productid }: FindByProductIdDto, @Res() res)
     {
       const id = +productid;
-      // const product = await this.productService.findById(id);
-      // return of(res.sendFile(join(process.cwd(), 'uploads/'+ product.link)));
       return await this.productService.findById(id);
     }
 }

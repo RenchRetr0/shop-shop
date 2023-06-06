@@ -22,6 +22,8 @@
       "@user/*": ["src/modules/user/*"],
       "@profile/*": ["src/modules/profile/*"],
       "@category/*": ["src/modules/category/*"],
+      "@product/*": ["src/modules/product/*"],
+      "@auth/*": ["src/modules/auth/*"],
     }
   }
 }
