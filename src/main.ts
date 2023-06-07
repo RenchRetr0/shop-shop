@@ -16,7 +16,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformResponseInterceptor());
 
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
-  app.use(cors({origin: 'http://localhost:5173'}));
+  app.use(cors({origin: ['http://localhost:5173', 'https://shop-flax-delta.vercel.app']}));
 
   await app.listen(port || 3000);
 }
