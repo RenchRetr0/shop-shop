@@ -42,7 +42,7 @@ export class OrderService
         }
         if(coutProduct == 0)
         {
-            throw new ProductOutOfStock();
+            throw new ProductOutOfStock(existOrder);
         }
     }
 
@@ -122,7 +122,7 @@ export class OrderService
             }
             if( productCount == OrderItemCount)
             {
-                throw new ProductOutOfStock();
+                throw new ProductOutOfStock(order);
             }
             if( productCount < OrderItemCount && productCount > 0)
             {
@@ -134,7 +134,7 @@ export class OrderService
                 await this.orderItemsRepository.update({ id }, {count: productCount, total: total});
                 await this.orderRepository.update({ id }, {price: price});
                 // await this.orderItemsRepository.remove(existOrderItem);
-                throw new ProductOutOfStock();
+                throw new ProductOutOfStock(order);
             }
         }
         
