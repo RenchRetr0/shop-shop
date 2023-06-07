@@ -5,4 +5,6 @@ export class FindByCategoryDto
     @IsNotEmpty()
     @IsString()
     readonly name!: string;
+
+    sortFilter: string | null;
 }

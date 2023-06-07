@@ -4,6 +4,7 @@ import { IsArray, IsNotEmpty, IsNumber, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { User } from "@user/entities/user.entity";
 import { OrderItem } from "./order-items.entity";
+import { Status } from "@common/enums/status.enum";
 
 @Entity('orders')
 export class Order extends BaseEntity implements OrderProperties
@@ -40,8 +41,8 @@ export class Order extends BaseEntity implements OrderProperties
 
     @IsNotEmpty()
     @Column({
-        type: 'boolean',
-        default: 0,
+        type: 'varchar',
+        default: Status.Undefined,
     })
-    isConfirm: boolean;
+    isStatus: string;
 }

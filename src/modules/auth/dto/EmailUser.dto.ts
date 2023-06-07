@@ -3,7 +3,7 @@ import { MESSAGE, REGEX } from 'src/app.utils';
 
 export class EmailUserDto {
   @IsNotEmpty({ message: 'Email cannot be empty.' })
-  @IsEmail()
+  // @IsEmail()
   readonly email: string;
 
   @IsNotEmpty({ message: 'Password cannot be empty.' })

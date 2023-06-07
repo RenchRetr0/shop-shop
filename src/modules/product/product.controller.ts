@@ -23,6 +23,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
 import { FindByCategoryDto } from './dto/findByCategory.dto';
 import { FindByProductIdDto } from './dto/findByProductId.dto';
+import { sortFileteDto } from './dto/sort-filter.dto';
 
 @Controller('product')
 export class ProductController {
@@ -58,16 +59,16 @@ export class ProductController {
         );
     }
 
-    @Get()
-    async findAll(): Promise<Product[]>
+    @Get(':sortFilter')
+    async findAll(@Param() { sortFilter }: sortFileteDto): Promise<Product[]>
     {
-        return await this.productService.findAll();
+      return await this.productService.findAll(sortFilter);
     }
 
-    @Get('felter/:categoryName')
-    async findProduct(@Param() { name }: FindByCategoryDto): Promise<Product[]>
+    @Get('felter/:categoryName/:sortFilter')
+    async findProduct(@Param() { name, sortFilter}: FindByCategoryDto): Promise<Product[]>
     {
-      return this.productService.findByCategory(name);
+      return this.productService.findByCategory(name, sortFilter);
     }
 
     @Get(':productid')

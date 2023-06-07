@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export class UsersNotFound extends HttpException {
+export class OrderNotFound extends HttpException {
   constructor() {
     super(
       {
-        message: 'Profile not found, please try later.',
+        message: 'Order not found, please try later.',
       },
       HttpStatus.INTERNAL_SERVER_ERROR,
     );

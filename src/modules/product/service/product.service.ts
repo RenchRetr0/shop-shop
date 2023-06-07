@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../entities/product.entity';
-import { FindOptionsWhere, MoreThan, Repository } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, MoreThan, Repository } from 'typeorm';
 import { CategoryService } from '@category/service/category.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { Category } from '@category/entities/category.entity';
+import { sortFileteDto } from '@product/dto/sort-filter.dto';
 
 @Injectable()
 export class ProductService
@@ -28,28 +29,81 @@ export class ProductService
             category,
             count: +createProductDto.count,
             price: +createProductDto.price,
-            link: `http://localhost:5000/uploads/${photoUrl}`
+            link: `https://shop-b6zj.onrender.com/uploads/${photoUrl}`
         });
 
         return await this.productRepository.save(product);
     }
 
-    async findAll(): Promise<Product[]>
+    async findAll(sortFilete: string): Promise<Product[]>
     {
-        return await this.productRepository.find({ where: { count: MoreThan(0) }, relations: { category: true } });
+        const sort = await this._sort(sortFilete);
+        
+        return await this.productRepository.find({ 
+            where: { count: MoreThan(0) },
+            order: sort, 
+            relations: { category: true } 
+        });
     }
 
-    async findByCategory(name: string): Promise<Product[]>
+    async findByCategory(name: string, sortFilete: string): Promise<Product[]>
     {
+        const sort = await this._sort(sortFilete);
         const categoryFind = await this.findCategory(name);
         const id = categoryFind.id;
-        const product = await this.productRepository.find({ where: { count: MoreThan(0), category: { id } }, relations: { category: true } });
+        const product = await this.productRepository.find({
+            where: {
+                count: MoreThan(0),
+                category: { id }
+            },
+            order: sort,
+            relations: { category: true }
+        });
         return product;
     }
 
     async findById(id: number): Promise<Product>
     {
         return await this.productRepository.findOne({ where: {id: id}, relations: { category: true } });
+    }
+
+    async updateProductForOrder(id: number, count: number)
+    {
+        await this.productRepository.update({id}, { count: count})
+    }
+
+    private async _sort(sortFilete: string): Promise<FindOptionsOrder<Product>>
+    {
+        if(sortFilete == 'new')
+        {
+            const sort: FindOptionsOrder<Product> = {id: 'DESC'};
+            return sort;
+        }
+        if(sortFilete == 'old')
+        {
+            const sort: FindOptionsOrder<Product> = {id: 'ASC'};
+            return sort;
+        }
+        if(sortFilete == 'expensive')
+        {
+            const sort: FindOptionsOrder<Product> = {price: 'DESC'};
+            return sort;
+        }
+        if(sortFilete == 'cheap')
+        {
+            const sort: FindOptionsOrder<Product> = {price: 'ASC'};
+            return sort;
+        }
+        if(sortFilete == 'alphabet')
+        {
+            const sort: FindOptionsOrder<Product> = {category: { name: 'ASC'}};
+            return sort;
+        }
+        if(sortFilete == 'back')
+        {
+            const sort: FindOptionsOrder<Product> = {category: 'DESC'};
+            return sort;
+        }
     }
 
     private async findCategory(name: string): Promise<Category>

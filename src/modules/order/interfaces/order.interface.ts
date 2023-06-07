@@ -4,5 +4,5 @@ export interface OrderProperties extends TimestampEntity
 {
     price: number;
     isOrder: boolean;
-    isConfirm: boolean;
+    isStatus: string;
 }
