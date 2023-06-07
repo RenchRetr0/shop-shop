@@ -8,28 +8,28 @@ export class CreateProductDto extends CreateDto
     @MinLength(2)
     readonly name: string;
 
-    @IsNotEmpty({ message: 'Product countre cannot be empty.'})
-    @IsString()
-    @MinLength(2)
+    // @IsNotEmpty({ message: 'Product countre cannot be empty.'})
+    // @IsString()
+    // @MinLength(2)
     readonly countre: string;
 
-    @IsNotEmpty({ message: 'Product description cannot be empty.'})
-    @IsString()
-    @MinLength(2)
+    // @IsNotEmpty({ message: 'Product description cannot be empty.'})
+    // @IsString()
+    // @MinLength(2)
     readonly description: string;
 
-    @IsNotEmpty({ message: 'Product category cannot be empty.'})
-    @IsString()
-    @MinLength(2)
+    // @IsNotEmpty({ message: 'Product category cannot be empty.'})
+    // @IsString()
+    // @MinLength(2)
     readonly categoryName: string;
 
-    @IsNotEmpty({ message: 'Product count cannot be empty'})
+    // @IsNotEmpty({ message: 'Product count cannot be empty'})
     // @IsNumber()
-    @MinLength(1)
+    // @MinLength(1)
     readonly count: number;
 
-    @IsNotEmpty({ message: ''})
+    // @IsNotEmpty({ message: ''})
     // @IsNumber()
-    @MinLength(1)
+    // @MinLength(1)
     readonly price: number;
 }
