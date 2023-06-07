@@ -1,6 +1,6 @@
 export enum Status
 {
-    Undefined = 'Собирается',
+    Undefined = 'Ожидание',
     Ready = 'Готов',
     NotReady = 'Отказ'
 }
