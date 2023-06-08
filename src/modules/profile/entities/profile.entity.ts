@@ -42,7 +42,6 @@ export class Profile extends BaseEntity implements ProfileProperties {
   })
   lastName!: string;
 
-  @IsNotEmpty()
   @IsString()
   @MinLength(1)
   @MaxLength(100)
