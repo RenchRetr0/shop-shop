@@ -27,7 +27,7 @@ export class AuthService
         if (!isCorrectPassword) {
           throw new UsersUnauthorized();
         }
-    
+
         return {
           user: user,
           accessToken: await this.generateToken(user),

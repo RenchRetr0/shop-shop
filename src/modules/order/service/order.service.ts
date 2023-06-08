@@ -73,7 +73,7 @@ export class OrderService
             }
         }
         await this.orderRepository.update({id}, {isOrder: true});
-        return await this.findOneOrder({id});
+        return await this.findOneOrder({id,  isOrder: false});
     }
 
     async findOrder(id: number): Promise<Order>
