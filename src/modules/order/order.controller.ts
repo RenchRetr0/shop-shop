@@ -6,6 +6,7 @@ import { Order } from './entities/order.entity';
 import { RolesDecorator } from '@auth/roles.decorator';
 import { Roles } from '@common/enums/roles.enum';
 import { UpdateStatusOrderDto } from './dto/update-status-order.dto';
+import { Status } from '@common/enums/status.enum';
 
 @Controller('order')
 export class OrderController {
@@ -43,7 +44,7 @@ export class OrderController {
     @Get('is-orders')
     async isAllOrders()
     {
-        return await this.orderService.findOneOrder({isOrder: true});
+        return await this.orderService.findOneOrder({isOrder: true, isStatus: Status.Undefined});
     }
 
     @UseGuards(JWTAuthGuard)
