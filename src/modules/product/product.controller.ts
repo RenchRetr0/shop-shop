@@ -72,8 +72,8 @@ export class ProductController {
       return this.productService.findByCategory(categoryIdNum, sortFilter);
     }
 
-    @Get(':productid')
-    async findOne(@Param() { productid }: FindByProductIdDto, @Res() res)
+    @Get('getOne/:productid')
+    async findOne(@Param() { productid }: FindByProductIdDto)
     {
       const id = +productid;
       return await this.productService.findById(id);
