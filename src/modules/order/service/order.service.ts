@@ -225,7 +225,7 @@ export class OrderService
     {
         const user = await this.userService.findOne({id});
 
-        if(!user || !user.profile)
+        if(!user)
         {
             throw new UsersNotFound();
         }
