@@ -1,7 +1,6 @@
 
 export class FindByCategoryDto
 {
-    name: string;
-
-    sortFilter: string | null;
+    categoryId: string;
+    sortFilter: string;
 }

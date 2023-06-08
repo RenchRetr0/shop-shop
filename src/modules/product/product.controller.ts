@@ -65,10 +65,11 @@ export class ProductController {
       return await this.productService.findAll(sortFilter);
     }
 
-    @Get('felter/:categoryName/:sortFilter')
-    async findProduct(@Param() { name, sortFilter}: FindByCategoryDto): Promise<Product[]>
+    @Get('felter/:categoryId/:sortFilter')
+    async findProduct(@Param() { categoryId, sortFilter}: FindByCategoryDto): Promise<Product[]>
     {
-      return this.productService.findByCategory(name, sortFilter);
+      const categoryIdNum = +categoryId;
+      return this.productService.findByCategory(categoryIdNum, sortFilter);
     }
 
     @Get(':productid')

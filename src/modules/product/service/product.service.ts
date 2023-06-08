@@ -46,11 +46,9 @@ export class ProductService
         });
     }
 
-    async findByCategory(name: string, sortFilete: string): Promise<Product[]>
+    async findByCategory(id: number, sortFilete: string): Promise<Product[]>
     {
         const sort = await this._sort(sortFilete);
-        const categoryFind = await this.findCategory(name);
-        const id = +categoryFind.id;
         const product = await this.productRepository.find({
             where: {
                 count: MoreThan(0),
