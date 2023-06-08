@@ -1,10 +1,7 @@
-import { IsNotEmpty, IsString } from "class-validator";
 
 export class FindByCategoryDto
 {
-    // @IsNotEmpty()
-    // @IsString()
-    readonly name!: string;
+    name: string;
 
     sortFilter: string | null;
 }

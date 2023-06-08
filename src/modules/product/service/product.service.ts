@@ -50,7 +50,7 @@ export class ProductService
     {
         const sort = await this._sort(sortFilete);
         const categoryFind = await this.findCategory(name);
-        const id = categoryFind.id;
+        const id = +categoryFind.id;
         const product = await this.productRepository.find({
             where: {
                 count: MoreThan(0),
