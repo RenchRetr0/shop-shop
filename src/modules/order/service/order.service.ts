@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from '../entities/order.entity';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindOptionsWhere, Not, Repository } from 'typeorm';
 import { OrderItem } from '../entities/order-items.entity';
 import { UserService } from '@user/service/user.service';
 import { ProductService } from '@product/service/product.service';
@@ -13,6 +13,7 @@ import { Product } from '@product/entities/product.entity';
 import { ProductOutOfStock } from '../errors/product-out-of-stock';
 import { OrderNotFound } from '../errors/order-not-found.error';
 import { Status } from '@common/enums/status.enum';
+import { Roles } from '@common/enums/roles.enum';
 
 @Injectable()
 export class OrderService
@@ -80,7 +81,7 @@ export class OrderService
         return await this.orderRepository.findOne({where: { user: { id }, isOrder: false}, relations: { user: true, orderItems: { product: true } }});
     }
 
-    async adminIsStatus(id: number, status: any)
+    async adminIsStatus(id: number, status: any): Promise<Order>
     {
         if(status == '1')
         {
@@ -93,12 +94,42 @@ export class OrderService
         return await this.findOneOrder({id});
     }
 
-    async findAllOrder()
-    {}
+    async minesProductInOrderItems(id: number)
+    {
+        const orderItems = await this.orderItemsRepository.findOne({where: { id: id }});
+        const orderId = +orderItems.order;
+        const order = await this.orderRepository.findOne({where: {id: orderId}});
+
+        const countOrderItems = +orderItems.count;
+        if(countOrderItems == 1)
+        {
+            await this.orderItemsRepository.remove(orderItems);
+        }
+        if(countOrderItems > 1)
+        {
+            const countOrderItems = +orderItems.count - 1;
+            const newTotalOrderItems = +orderItems.price * countOrderItems;
+            await this.orderItemsRepository.update({id: id}, {count: countOrderItems, total: newTotalOrderItems});
+        }
+        const newPriceOrder = +order.price - +orderItems.price;
+        return await this.orderRepository.update({id: orderId}, {price: newPriceOrder});
+    }
 
     async findOneOrder(orderFilterOptrions: FindOptionsWhere<Order>)
     {
         return await this.orderRepository.findOne({where: orderFilterOptrions, relations: { user: true, orderItems: { product: true } }})
+    }
+
+    async getHistoryOrders(role: string, id: number)
+    {
+        if(role == Roles.ADMIN)
+        {
+            return await this.orderRepository.find({where: {isStatus: Not(Status.Undefined)}});
+        }
+        else
+        {
+            return await this.orderRepository.find({where: {user: {id}, isStatus: Not(Status.Undefined)}});
+        }
     }
 
     private async _findOrderItems(order: Order, product: Product): Promise<Order>

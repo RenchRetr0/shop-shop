@@ -29,8 +29,7 @@ export class AuthService
         }
     
         return {
-          email: user.email,
-          role: user.role,
+          user: user,
           accessToken: await this.generateToken(user),
         };
     }

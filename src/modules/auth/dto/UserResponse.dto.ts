@@ -1,6 +1,7 @@
+import { User } from "@user/entities/user.entity";
+
 export class UserResponseDto {
-    email: string;
-    role: string;
+    user: User;
     accessToken: string;
 }
   
