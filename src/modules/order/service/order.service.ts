@@ -5,7 +5,6 @@ import { FindOptionsWhere, Repository } from 'typeorm';
 import { OrderItem } from '../entities/order-items.entity';
 import { UserService } from '@user/service/user.service';
 import { ProductService } from '@product/service/product.service';
-import { User } from '@user/entities/user.entity';
 import { ProductOutOfStock } from '../errors/product-out-of-stock';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -71,8 +70,7 @@ export class OrderService
     async checkoutOrder(orderId: number, userId: number): Promise<Order>
     {
         await this._updateOrder({id: orderId}, {isOrder: true});
-        const user = await this.userService.findOne({id: userId});
-        await this._createOrder(user);
+        await this._createOrder(userId);
         return await this.findOrder({user: {id: userId}, isOrder: false });
     }
 
@@ -109,13 +107,14 @@ export class OrderService
     }
 
     // После регистриции или оформленного заказа, создаёться новая корзина 
-    async _createOrder(user: User): Promise<void>
+    async _createOrder(userId: number): Promise<Order>
     {
+        const user = await this.userService.findOne({id: userId});
         const order: Order = Order.create({
             user
         });
         
-        await this.orderRepository.save(order);
+        return await this.orderRepository.save(order);
     }
 
     // Находим заказ(-ы);

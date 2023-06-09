@@ -24,6 +24,15 @@ export class OrderController {
         return await this.orderService.addProduct(+productId, userId);
     }
 
+    // Создание новой карзины
+    @UseGuards(JWTAuthGuard)
+    @Get('create/order')
+    async createOrder(@Request() req): Promise<Order>
+    {
+        const userId = +req.user.userId;
+        return await this.orderService._createOrder(userId);
+    }
+
     // получение карзины
     @UseGuards(JWTAuthGuard)
     @Get('get-order')
