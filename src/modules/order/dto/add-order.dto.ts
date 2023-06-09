@@ -4,5 +4,5 @@ export class AddOrderDto extends CreateDto
 {
     // @IsNotEmpty()
     // @IsString()
-    readonly id: string;
+    readonly productId: string;
 }

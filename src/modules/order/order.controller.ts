@@ -7,6 +7,7 @@ import { RolesDecorator } from '@auth/roles.decorator';
 import { Roles } from '@common/enums/roles.enum';
 import { GetHistoryDTO, MinesProductDTO, UpdateStatusOrderDto } from './dto/update-status-order.dto';
 import { Status } from '@common/enums/status.enum';
+import { Not } from 'typeorm';
 
 @Controller('order')
 export class OrderController {
@@ -14,70 +15,77 @@ export class OrderController {
         private readonly orderService: OrderService
     ) {}
 
-    // добавление корзины
+    // добавление товара в корзину
     @UseGuards(JWTAuthGuard)
-    @Get('order/:id')
-    async addOrder(@Param() { id }: AddOrderDto, @Request() req): Promise<Order>
+    @Get('addProduct/:productId')
+    async addOrder(@Param() { productId }: AddOrderDto, @Request() req): Promise<Order>
     {
-        const userId = req.user.userId;
-        const productId = +id;
-        return await this.orderService.addOrder(productId, userId);
+        const userId = +req.user.userId;
+        return await this.orderService.addProduct(+productId, userId);
     }
 
     // получение карзины
     @UseGuards(JWTAuthGuard)
-    @Get('orders')
+    @Get('get-order')
     async findOrders(@Request() req): Promise<Order>
     {
-        const userId = req.user.userId;
-        return await this.orderService.findOrder(userId);
+        const userId = +req.user.userId;
+        return await this.orderService.findOrder({id: userId});
     }
 
     // оформление заказа пользователем
     @UseGuards(JWTAuthGuard)
-    @Get('is-order/:id')
-    async isOrder(@Param() { id }: AddOrderDto)
+    @Get('checkout-order/:productId')
+    async isOrder(@Param() { productId }: AddOrderDto, @Request() req): Promise<Order>
     {
-        const order = +id;
-        return await this.orderService.isOrderUser(order);
+        const userId = +req.user.userId;
+        return await this.orderService.checkoutOrder(+productId, userId);
     }
 
     // выводит все оформленные заказы без окончательного статуса
     @UseGuards(JWTAuthGuard)
     @RolesDecorator(Roles.ADMIN)
-    @Get('is-orders')
-    async isAllOrders()
+    @Get('admin/get-orders')
+    async isAllOrders(@Request() req): Promise<Order | Order[]>
     {
-        return await this.orderService.findOneOrder({isOrder: true, isStatus: Status.Undefined});
+        const userId = +req.user.userId;
+        return await this.orderService.findOrders({user: {id: userId}, isStatus: Status.Undefined});
     }
 
     // меняет статус оформленного заказа
     @UseGuards(JWTAuthGuard)
     @RolesDecorator(Roles.ADMIN)
-    @Get(':orderId/:status')
+    @Get('update-status/:orderId/:status')
     async isStatus(@Param() {orderId, status}: UpdateStatusOrderDto )
     {
-        const id = +orderId;
-        return await this.orderService.adminIsStatus(id, status);
+        
     }
 
     // Кнопка минус для корзины
     // order/mines-product/:orderItemsId J
     @UseGuards(JWTAuthGuard)
-    @Get('mines-product/:orderItemsId')
-    async minesProduct(@Param() {orderItemsId}: MinesProductDTO )
+    @Get('minus-count/:productId')
+    async minesProduct(@Param() {productId}: MinesProductDTO, @Request() req )
     {
-        const id = +orderItemsId;
-        return await this.orderService.minesProductInOrderItems(id);
+        // переделать
+        const userId = +req.user.userId;
+        return await this.orderService.minusCountOrderItem(+productId, userId);
     }
 
     // История всех заказов
     // order/history/:role J
     @UseGuards(JWTAuthGuard)
     @Get('history/:role')
-    async getHistoreOrder(@Param() {role}: GetHistoryDTO, @Request() req )
+    async getHistoreOrder(@Param() {role}: GetHistoryDTO, @Request() req ): Promise<Order | Order[]>
     {
-        const userId = +req.user.userId;
-        return await this.orderService.getHistoryOrders(role, userId);
+        if(role == 'ADMIN')
+        {
+            return await this.orderService.findOrders({isStatus: Not(Status.Undefined)})
+        }
+        if(role == 'USER')
+        {
+            const userId = +req.user.userId;
+            return await this.orderService.findOrders({user: {id: userId}, isStatus: Not(Status.Undefined)})
+        }
     }
 }

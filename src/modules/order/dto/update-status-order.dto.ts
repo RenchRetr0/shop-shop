@@ -6,7 +6,7 @@ export class UpdateStatusOrderDto
 
 export class MinesProductDTO
 {
-    orderItemsId: string;
+    productId: string;
 }
 
 export class GetHistoryDTO

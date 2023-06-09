@@ -16,9 +16,10 @@ export class Order extends BaseEntity implements OrderProperties
     @IsNotEmpty()
     @IsNumber()
     @Column({
-        type: 'int8'
+        type: 'int8',
+        default: 0
     })
-    price!: number;
+    price: number;
 
     @Type(() => User)
     @ManyToOne(() => User)
