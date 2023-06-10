@@ -26,7 +26,7 @@ export class OrderController {
 
     // Создание новой карзины
     @UseGuards(JWTAuthGuard)
-    @Get('create/order')
+    @Get('create')
     async createOrder(@Request() req): Promise<Order>
     {
         const userId = +req.user.userId;
@@ -65,9 +65,9 @@ export class OrderController {
     @UseGuards(JWTAuthGuard)
     @RolesDecorator(Roles.ADMIN)
     @Get('update-status/:orderId/:status')
-    async isStatus(@Param() {orderId, status}: UpdateStatusOrderDto )
+    async isStatus(@Param() {orderId, status}: UpdateStatusOrderDto ): Promise<Order>
     {
-        
+        return await this.orderService.updateStatus(+orderId, +status);
     }
 
     // Кнопка минус для корзины

@@ -7,6 +7,7 @@ import { UserService } from '@user/service/user.service';
 import { ProductService } from '@product/service/product.service';
 import { ProductOutOfStock } from '../errors/product-out-of-stock';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { Status } from '@common/enums/status.enum';
 
 @Injectable()
 export class OrderService
@@ -32,8 +33,9 @@ export class OrderService
             {
                 const newCount = +orderItems.count + 1;
                 const newTotal = +orderItems.price * newCount;
+                const newOrderPrice = +order.price + +product.price;
                 await this._updateOrderItems({id: orderItems.id}, { count: newCount, total: newTotal});
-                await this._updateOrder({user: {id: userId} }, {price: newTotal});
+                await this._updateOrder({user: {id: userId} }, {price: newOrderPrice});
                 return await this.findOrder({user: {id: userId}, isOrder: false });
             }
             else
@@ -50,8 +52,25 @@ export class OrderService
                 product,
                 order
             });
+            const newOrderPrice = +order.price + +product.price;
             await this.orderItemsRepository.save(orderItems);
+            await this._updateOrder({user: {id: userId} }, {price: newOrderPrice});
             return await this.findOrder({user: {id: userId}, isOrder: false });
+        }
+    }
+
+    // Админ меняет статус оформленного заказа
+    async updateStatus(orderId: number, status: number): Promise<Order>
+    {
+        if(status == 1)
+        {
+            await this._updateOrder({id: orderId}, {isStatus: Status.Ready});
+            return await this.findOrder({id: orderId});
+        }
+        else
+        {
+            await this._updateOrder({id: orderId}, {isStatus: Status.NotReady});
+            return await this.findOrder({id: orderId});
         }
     }
 

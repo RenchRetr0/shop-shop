@@ -31,8 +31,17 @@ export class AuthService
           throw new UsersUnauthorized();
         }
 
-        const id = user.id;
+        const id = +user.id;
         const order = await this.orderService.findOrder({user: { id }, isOrder: false});
+        if(order == null)
+        {
+          const newOrder = await this.orderService._createOrder(id);
+          return {
+            user: user,
+            order: newOrder,
+            accessToken: await this.generateToken(user),
+          };
+        }
 
         return {
           user: user,

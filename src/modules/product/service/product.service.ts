@@ -20,8 +20,7 @@ export class ProductService
         photoUrl: string
     ): Promise<Product>
     {
-        const name = createProductDto.categoryName;
-        const category = await this.findCategory(name);
+        const category = await this.findCategory({id: createProductDto.categoryId});
         const product: Product = Product.create({
             name: createProductDto.name,
             countre: createProductDto.countre,
@@ -104,8 +103,8 @@ export class ProductService
         }
     }
 
-    private async findCategory(name: string): Promise<Category>
+    private async findCategory(categoryFilterQuery: FindOptionsWhere<Category>): Promise<Category>
     {
-        return await this.categoryService.findOne({name});
+        return await this.categoryService.findOne(categoryFilterQuery);
     }
 }

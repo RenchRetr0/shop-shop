@@ -3,14 +3,8 @@ import { IsNotEmpty, IsNumber, IsString, MinLength } from "class-validator";
 
 export class CreateProductDto extends CreateDto
 {
-    @IsNotEmpty({ message: 'Product name cannot be empty.'})
-    @IsString()
-    @MinLength(2)
     readonly name: string;
 
-    // @IsNotEmpty({ message: 'Product countre cannot be empty.'})
-    // @IsString()
-    // @MinLength(2)
     readonly countre: string;
 
     // @IsNotEmpty({ message: 'Product description cannot be empty.'})
@@ -21,7 +15,7 @@ export class CreateProductDto extends CreateDto
     // @IsNotEmpty({ message: 'Product category cannot be empty.'})
     // @IsString()
     // @MinLength(2)
-    readonly categoryName: string;
+    readonly categoryId: number;
 
     // @IsNotEmpty({ message: 'Product count cannot be empty'})
     // @IsNumber()
