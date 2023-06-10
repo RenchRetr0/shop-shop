@@ -1,5 +1,4 @@
 import { Roles } from '@common/enums/roles.enum';
-// import { Profile } from '@user/entities/profile.entity';
 import { hash } from 'bcrypt';
 import { Exclude, Type } from 'class-transformer';
 import {
@@ -7,10 +6,7 @@ import {
     IsEmail,
     IsEnum,
     IsNotEmpty,
-    IsNotEmptyObject,
-    IsOptional,
     IsString,
-    ValidateNested,
 } from 'class-validator';
 import {
     BaseEntity,
@@ -19,7 +15,6 @@ import {
     CreateDateColumn,
     Entity,
     JoinColumn,
-    OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
@@ -61,8 +56,6 @@ export class User extends BaseEntity implements UserProperties {
   })
   role: Roles;
 
-  // @IsNotEmptyObject()
-  // @ValidateNested()
   @Type(() => Profile)
   @OneToOne(() => Profile)
   @JoinColumn()

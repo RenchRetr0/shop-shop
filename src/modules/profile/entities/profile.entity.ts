@@ -3,7 +3,6 @@ import {
     IsNotEmpty,
     IsPhoneNumber,
     IsString,
-    IsUUID,
     MaxLength,
     MinLength,
 } from 'class-validator';
@@ -20,9 +19,8 @@ import { ProfileProperties } from '../interfaces/profile.interface';
 @Entity('profiles')
 export class Profile extends BaseEntity implements ProfileProperties {
   @IsNotEmpty()
-  @IsUUID('4')
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @IsNotEmpty()
   @IsString()
@@ -44,7 +42,6 @@ export class Profile extends BaseEntity implements ProfileProperties {
   })
   lastName!: string;
 
-  @IsNotEmpty()
   @IsString()
   @MinLength(1)
   @MaxLength(100)

@@ -7,6 +7,7 @@ import { compare } from 'bcrypt';
 import { UserResponseDto } from '../dto/UserResponse.dto';
 import { UsersNotFound } from '@user/errors/user-not-found.error';
 import { UsersUnauthorized } from '@user/errors/user-unauthorizad.error';
+import { OrderService } from 'src/modules/order/service/order.service';
 
 @Injectable()
 export class AuthService
@@ -14,6 +15,7 @@ export class AuthService
     constructor (
         private userService: UserService,
         private jwtService: JwtService,
+        private orderService: OrderService,
     ) {}
 
     async signIn(emailUserDto: EmailUserDto): Promise<UserResponseDto> {
@@ -24,13 +26,26 @@ export class AuthService
           emailUserDto.password,
           user.password,
         );
+
         if (!isCorrectPassword) {
           throw new UsersUnauthorized();
         }
-    
+
+        const id = +user.id;
+        const order = await this.orderService.findOrder({user: { id }, isOrder: false});
+        if(order == null)
+        {
+          const newOrder = await this.orderService._createOrder(id);
+          return {
+            user: user,
+            order: newOrder,
+            accessToken: await this.generateToken(user),
+          };
+        }
+
         return {
-          email: user.email,
-          role: user.role,
+          user: user,
+          order,
           accessToken: await this.generateToken(user),
         };
     }

@@ -1,6 +1,9 @@
+import { User } from "@user/entities/user.entity";
+import { Order } from "src/modules/order/entities/order.entity";
+
 export class UserResponseDto {
-    email: string;
-    role: string;
+    user: User;
+    order: Order;
     accessToken: string;
 }
   
