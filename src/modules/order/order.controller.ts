@@ -48,7 +48,7 @@ export class OrderController {
     async isOrder(@Param() { productId }: AddOrderDto, @Request() req): Promise<Order>
     {
         const userId = +req.user.userId;
-        return await this.orderService.checkoutOrder(+productId, userId);
+        return await this.orderService.checkoutOrder(+productId - 1, userId);
     }
 
     // выводит все оформленные заказы без окончательного статуса
