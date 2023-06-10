@@ -21,7 +21,7 @@ export class OrderController {
     async addOrder(@Param() { productId }: AddOrderDto, @Request() req): Promise<Order>
     {
         const userId = +req.user.userId;
-        const newProductId = +productId - 1;
+        const newProductId = +productId + 1;
         return await this.orderService.addProduct(newProductId, userId);
     }
 
