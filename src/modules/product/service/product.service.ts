@@ -28,7 +28,7 @@ export class ProductService
             category,
             count: +createProductDto.count,
             price: +createProductDto.price,
-            link: `https://shop-b6zj.onrender.com/uploads/${photoUrl}`
+            link: `http://shop-b6zj.onrender.com/uploads/${photoUrl}`
         });
 
         return await this.productRepository.save(product);

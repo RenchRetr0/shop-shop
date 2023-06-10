@@ -21,6 +21,7 @@ export class OrderController {
     async addOrder(@Param() { productId }: AddOrderDto, @Request() req): Promise<Order>
     {
         const userId = +req.user.userId;
+        console.log(userId);
         return await this.orderService.addProduct(+productId, userId);
     }
 
@@ -30,6 +31,7 @@ export class OrderController {
     async createOrder(@Request() req): Promise<Order>
     {
         const userId = +req.user.userId;
+        console.log(userId);
         return await this.orderService._createOrder(userId);
     }
 
