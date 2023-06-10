@@ -12,6 +12,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformResponseInterceptor());
 
-  await app.listen(port || 3000);
+  await app.listen(port || 3000, '45.130.42.227');
 }
 bootstrap();
