@@ -21,8 +21,8 @@ export class OrderController {
     async addOrder(@Param() { productId }: AddOrderDto, @Request() req): Promise<Order>
     {
         const userId = +req.user.userId;
-        const newProductId = +productId + 1;
-        return await this.orderService.addProduct(newProductId, userId);
+        // const newProductId = +productId + 1;
+        return await this.orderService.addProduct(+productId, userId);
     }
 
     // Создание новой карзины
@@ -39,8 +39,8 @@ export class OrderController {
     @Get('get-order')
     async findOrders(@Request() req): Promise<Order>
     {
-        const userId = +req.user.userId - 1;
-        return await this.orderService.findOrder({id: userId});
+        const userId = +req.user.userId;
+        return await this.orderService.findOrder({user: {id: userId}, isOrder: false});
     }
 
     // оформление заказа пользователем
@@ -48,7 +48,7 @@ export class OrderController {
     @Get('checkout-order/:productId')
     async isOrder(@Param() { productId }: AddOrderDto, @Request() req): Promise<Order>
     {
-        const userId = +req.user.userId;
+        const userId = +req.user.userId - 1;
         return await this.orderService.checkoutOrder(+productId, userId);
     }
 
