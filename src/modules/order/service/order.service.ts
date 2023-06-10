@@ -22,6 +22,7 @@ export class OrderService
     // Добавляем продукт в корзину в корзину
     async addProduct(productId: number, userId: number): Promise<Order>
     {
+        console.log(userId);
         const product = await this.productService.findById(productId);
         const order = await this.findOrder({user: {id: userId}, isOrder: false });
 
