@@ -35,7 +35,7 @@ export class OrderService
                 const newTotal = +orderItems.price * newCount;
                 const newOrderPrice = +order.price + +product.price;
                 await this._updateOrderItems({id: orderItems.id}, { count: newCount, total: newTotal});
-                await this._updateOrder({user: {id: userId} }, {price: newOrderPrice});
+                await this._updateOrder({user: {id: userId}, isOrder: false }, {price: newOrderPrice});
                 return await this.findOrder({user: {id: userId}, isOrder: false });
             }
             else
