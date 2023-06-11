@@ -85,12 +85,6 @@ export class OrderService
         return await this.findOrder({user: {id: userId}, isOrder: false });
     }
 
-    /*
-    =============================================================
-    ====================Доработать=======================
-    =============================================================
-    */
-
     // Пользователь офоримил заказ и получил новую карзину
     async checkoutOrder(orderId: number, userId: number): Promise<Order>
     {

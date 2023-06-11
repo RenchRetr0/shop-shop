@@ -5,7 +5,7 @@ import { AddOrderDto, isOrderDto } from './dto/add-order.dto';
 import { Order } from './entities/order.entity';
 import { RolesDecorator } from '@auth/roles.decorator';
 import { Roles } from '@common/enums/roles.enum';
-import { GetHistoryDTO, MinesProductDTO, UpdateStatusOrderDto } from './dto/update-status-order.dto';
+import { ClearOrderDTO, GetHistoryDTO, MinesProductDTO, UpdateStatusOrderDto } from './dto/update-status-order.dto';
 import { Status } from '@common/enums/status.enum';
 import { Not } from 'typeorm';
 
@@ -69,15 +69,20 @@ export class OrderController {
         return await this.orderService.updateStatus(+orderId, +status);
     }
 
-    // Кнопка минус для корзины
     // order/mines-product/:orderItemsId J
     @UseGuards(JWTAuthGuard)
     @Get('minus-count/:productId')
     async minesProduct(@Param() {productId}: MinesProductDTO, @Request() req )
     {
-        // переделать
         const userId = +req.user.userId;
         return await this.orderService.minusCountOrderItem(+productId, userId);
+    }
+
+    @UseGuards(JWTAuthGuard)
+    @Get('clear/:orderId')
+    async clearOrder(@Param() {orderId}: ClearOrderDTO)
+    {
+        return await this.orderService.clearOrder(+orderId);
     }
 
     // История всех заказов

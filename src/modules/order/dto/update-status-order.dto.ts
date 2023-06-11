@@ -13,3 +13,8 @@ export class GetHistoryDTO
 {
     role: string;
 }
+
+export class ClearOrderDTO
+{
+    orderId: string;
+}
