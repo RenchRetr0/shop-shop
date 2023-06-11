@@ -58,7 +58,7 @@ export class OrderController {
     async isAllOrders(@Request() req): Promise<Order | Order[]>
     {
         const userId = +req.user.userId;
-        return await this.orderService.findOrders({user: {id: userId}, isStatus: Status.Undefined});
+        return await this.orderService.findOrders({user: {id: userId}, isStatus: Status.Undefined, isOrder: true});
     }
 
     // меняет статус оформленного заказа
