@@ -54,7 +54,7 @@ export class OrderService
             });
             const newOrderPrice = +order.price + +product.price;
             await this.orderItemsRepository.save(orderItems);
-            await this._updateOrder({user: {id: userId} }, {price: newOrderPrice});
+            await this._updateOrder({id: order.id }, {price: newOrderPrice});
             return await this.findOrder({user: {id: userId}, isOrder: false });
         }
     }
