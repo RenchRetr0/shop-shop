@@ -89,12 +89,12 @@ export class OrderController {
     {
         if(role == 'ADMIN')
         {
-            return await this.orderService.findOrders({isStatus: Not(Status.Undefined)})
+            return await this.orderService.findOrders({isStatus: Not(Status.Undefined), isOrder: true})
         }
         if(role == 'USER')
         {
             const userId = +req.user.userId;
-            return await this.orderService.findOrders({user: {id: userId}, isStatus: Not(Status.Undefined)})
+            return await this.orderService.findOrders({user: {id: userId}, isStatus: Not(Status.Undefined), isOrder: true})
         }
     }
 }
