@@ -94,6 +94,16 @@ export class OrderService
     // Пользователь офоримил заказ и получил новую карзину
     async checkoutOrder(orderId: number, userId: number): Promise<Order>
     {
+        const order = await this.findOrder({id: orderId});
+        const orderItems: any = order.orderItems;
+        const lengthOrderItems = orderItems.length;
+        for(let i = 0; i < lengthOrderItems; i++)
+        {
+            let orderItem = orderItems[i];
+            let productId = +orderItem.product.id;
+            let newCoutnProduct = +orderItem.product.count - +orderItem.count;
+            await this.productService.updateProductForOrder(productId, newCoutnProduct);
+        }
         await this._updateOrder({id: orderId}, {isOrder: true});
         await this._createOrder(userId);
         return await this.findOrder({user: {id: userId}, isOrder: false });
@@ -113,7 +123,7 @@ export class OrderService
             const newCount = +orderItems.count - 1;
             const newTotal = +orderItems.price * newCount;
             const newPriceOrder = +order.price - +orderItems.price;
-            await this._updateOrderItems({ order: {id: order.id} }, {count: newCount, total: newTotal});
+            await this._updateOrderItems({ order: {id: order.id}, product: {id: productId} }, {count: newCount, total: newTotal});
             await this._updateOrder({id: order.id}, {price: newPriceOrder});
             return await this.findOrder({user: {id: userId}, isOrder: false });
         }

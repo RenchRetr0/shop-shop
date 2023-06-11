@@ -86,11 +86,11 @@ export class OrderController {
     @Get('history/:role')
     async getHistoreOrder(@Param() {role}: GetHistoryDTO, @Request() req ): Promise<Order | Order[]>
     {
-        if(role == 'ADMIN')
+        if(role == 'admin')
         {
             return await this.orderService.findOrders({isStatus: Not(Status.Undefined), isOrder: true})
         }
-        if(role == 'USER')
+        if(role == 'user')
         {
             const userId = +req.user.userId;
             return await this.orderService.findOrders({user: {id: userId}, isStatus: Not(Status.Undefined), isOrder: true})
