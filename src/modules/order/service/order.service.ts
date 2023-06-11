@@ -152,7 +152,11 @@ export class OrderService
     // Находим заказ(-ы);
     async findOrders(orderFilterQuery: FindOptionsWhere<Order>): Promise<Order | Order[]>
     {
-        return await this.orderRepository.find({where: orderFilterQuery, relations: { user: true, orderItems: { product: true } } });
+        return await this.orderRepository.find({
+            where: orderFilterQuery,
+            relations: { user: true, orderItems: { product: true } },
+            order: {id: 'DESC'}
+        });
     }
 
     // Находим корзину;
