@@ -55,10 +55,9 @@ export class OrderController {
     @UseGuards(JWTAuthGuard)
     @RolesDecorator(Roles.ADMIN)
     @Get('admin/get-orders')
-    async isAllOrders(@Request() req): Promise<Order | Order[]>
+    async isAllOrders(): Promise<Order | Order[]>
     {
-        const userId = +req.user.userId;
-        return await this.orderService.findOrders({user: {id: userId}, isStatus: Status.Undefined, isOrder: true});
+        return await this.orderService.findOrders({isStatus: Status.Undefined, isOrder: true});
     }
 
     // меняет статус оформленного заказа

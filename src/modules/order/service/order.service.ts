@@ -77,8 +77,8 @@ export class OrderService
     // Удалить товар в корзине
     async deletOrderItem(productId: number, userId: number): Promise<Order>
     {
-        const orderItems = await this._findOrderItem({ product: {id: productId} });
         const order = await this.findOrder({user: {id: userId}, isOrder: false });
+        const orderItems = await this._findOrderItem({ product: {id: productId}, order: {id: order.id} });
         const newPriceOrder = +order.price - +orderItems.total;
         await this.orderItemsRepository.remove(orderItems);
         await this._updateOrder({id: order.id}, {price: newPriceOrder});
