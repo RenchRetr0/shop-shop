@@ -64,7 +64,7 @@ export class OrderController {
     @UseGuards(JWTAuthGuard)
     @RolesDecorator(Roles.ADMIN)
     @Get('update-status/:orderId/:status')
-    async isStatus(@Param() {orderId, status}: UpdateStatusOrderDto ): Promise<Order>
+    async isStatus(@Param() {orderId, status}: UpdateStatusOrderDto ): Promise<Order | Order[]>
     {
         return await this.orderService.updateStatus(+orderId, +status);
     }

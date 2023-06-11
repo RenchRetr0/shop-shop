@@ -60,18 +60,19 @@ export class OrderService
     }
 
     // Админ меняет статус оформленного заказа
-    async updateStatus(orderId: number, status: number): Promise<Order>
+    async updateStatus(orderId: number, status: number): Promise<Order[] | Order>
     {
         if(status == 1)
         {
             await this._updateOrder({id: orderId}, {isStatus: Status.Ready});
-            return await this.findOrder({id: orderId});
+            // return await this.findOrder({id: orderId});
         }
         else
         {
             await this._updateOrder({id: orderId}, {isStatus: Status.NotReady});
-            return await this.findOrder({id: orderId});
+            // return await this.findOrder({id: orderId});
         }
+        return await this.findOrders({isStatus: Status.Undefined, isOrder: true});
     }
 
     // Удалить товар в корзине
