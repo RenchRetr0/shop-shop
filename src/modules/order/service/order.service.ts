@@ -28,7 +28,7 @@ export class OrderService
         const existOrderItem = await this._existsAddProductInOrder(+order.id, productId);
         if(existOrderItem)
         {
-            const orderItems = await this._findOrderItem({order: { id: order.id } });
+            const orderItems = await this._findOrderItem({order: { id: order.id }, product: {id: productId} });
             if( +product.count > orderItems.count)
             {
                 const newCount = +orderItems.count + 1;
@@ -85,6 +85,12 @@ export class OrderService
         return await this.findOrder({user: {id: userId}, isOrder: false });
     }
 
+    /*
+    =============================================================
+    ====================Доработать=======================
+    =============================================================
+    */
+
     // Пользователь офоримил заказ и получил новую карзину
     async checkoutOrder(orderId: number, userId: number): Promise<Order>
     {
@@ -97,7 +103,7 @@ export class OrderService
     async minusCountOrderItem(productId: number, userId: number): Promise<Order>
     {
         const order = await this.findOrder({user: {id: userId}, isOrder: false });
-        const orderItems = await this._findOrderItem({ order: {id: order.id} });
+        const orderItems = await this._findOrderItem({ order: {id: order.id}, product: {id: productId} });
         if(+orderItems.count == 1)
         {
             return await this.deletOrderItem(productId, userId);

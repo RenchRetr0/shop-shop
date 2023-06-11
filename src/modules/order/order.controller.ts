@@ -1,7 +1,7 @@
 import { Controller, Get, Param, UseGuards, Request } from '@nestjs/common';
 import { OrderService } from './service/order.service';
 import { JWTAuthGuard } from '@auth/guards/jwt-auth.guard';
-import { AddOrderDto } from './dto/add-order.dto';
+import { AddOrderDto, isOrderDto } from './dto/add-order.dto';
 import { Order } from './entities/order.entity';
 import { RolesDecorator } from '@auth/roles.decorator';
 import { Roles } from '@common/enums/roles.enum';
@@ -21,7 +21,6 @@ export class OrderController {
     async addOrder(@Param() { productId }: AddOrderDto, @Request() req): Promise<Order>
     {
         const userId = +req.user.userId;
-        // const newProductId = +productId + 1;
         return await this.orderService.addProduct(+productId, userId);
     }
 
@@ -45,11 +44,11 @@ export class OrderController {
 
     // оформление заказа пользователем
     @UseGuards(JWTAuthGuard)
-    @Get('checkout-order/:productId')
-    async isOrder(@Param() { productId }: AddOrderDto, @Request() req): Promise<Order>
+    @Get('checkout-order/:orderId')
+    async isOrder(@Param() { orderId }: isOrderDto, @Request() req): Promise<Order>
     {
-        const userId = +req.user.userId - 1;
-        return await this.orderService.checkoutOrder(+productId, userId);
+        const userId = +req.user.userId;
+        return await this.orderService.checkoutOrder(+orderId, userId);
     }
 
     // выводит все оформленные заказы без окончательного статуса

@@ -6,3 +6,8 @@ export class AddOrderDto extends CreateDto
     // @IsString()
     readonly productId: string;
 }
+
+export class isOrderDto 
+{
+    orderId: string;
+}
