@@ -162,7 +162,15 @@ export class OrderService
     // Находим корзину;
     async findOrder(orderFilterQuery: FindOptionsWhere<Order>): Promise<Order>
     {
-        return await this.orderRepository.findOne({where: orderFilterQuery, relations: { user: true, orderItems: { product: true } } });
+        return await this.orderRepository.findOne({
+            where: orderFilterQuery,
+            relations: { user: true, orderItems: { product: true } },
+            order: {
+                orderItems: {
+                    id: 'ASC',
+                }
+            },
+        });
     }
 
     private async _updateOrder(
