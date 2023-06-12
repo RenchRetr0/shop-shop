@@ -83,13 +83,12 @@ export class ProductService
         }
         if(sortFilete == 'expensive')
         {
-            const sort: FindOptionsOrder<Product> = {price: 'ASC'};
+            const sort: FindOptionsOrder<Product> = {price: 'DESC'};
             return sort;
         }
         if(sortFilete == 'cheap')
         {
-            
-            const sort: FindOptionsOrder<Product> = {price: 'DESC'};
+            const sort: FindOptionsOrder<Product> = {price: 'ASC'};
             return sort;
         }
         if(sortFilete == 'alphabet')
