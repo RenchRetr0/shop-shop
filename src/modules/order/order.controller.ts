@@ -98,7 +98,7 @@ export class OrderController {
         if(role == 'user')
         {
             const userId = +req.user.userId;
-            return await this.orderService.findOrders({user: {id: userId}, isStatus: Not(Status.Undefined), isOrder: true})
+            return await this.orderService.findOrders({user: {id: userId}, isOrder: true})
         }
     }
 }
