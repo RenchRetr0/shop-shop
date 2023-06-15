@@ -106,8 +106,6 @@ export class ProductController {
     ): Promise<void>
     {
       const id = +productId;
-      console.log(updateProductDto);
-      console.log(file);
       return await this.productService.updateProductReqwest(id, updateProductDto, file?.filename);
     }
 
