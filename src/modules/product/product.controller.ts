@@ -90,15 +90,25 @@ export class ProductController {
     }
 
     @Put('update/:productId')
+    @UseInterceptors(
+      FileInterceptor('photo', {
+          storage: MulterStorageConfig,
+      }),
+  )
     @UseGuards(JWTAuthGuard)
     @RolesDecorator(Roles.ADMIN)
     async update(
       @Param() { productId }: FindByIdDto,
-      @Body() updateProductDto: updateProductDto
+      @Body() updateProductDto: updateProductDto,
+      @UploadedFile(
+      )
+      file: Express.Multer.File | null,
     ): Promise<void>
     {
       const id = +productId;
-      return await this.productService.updateProductReqwest(id, updateProductDto);
+      console.log(updateProductDto);
+      console.log(file);
+      return await this.productService.updateProductReqwest(id, updateProductDto, file?.filename);
     }
 
     @Get('products/admin')

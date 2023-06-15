@@ -75,16 +75,37 @@ export class ProductService
         await this.productRepository.update({id}, {count: count});
     }
 
-    async updateProductReqwest(id: number, updateProductDto: updateProductDto): Promise<void>
+    async updateProductReqwest(
+        id: number,
+        updateProductDto: updateProductDto,
+        photoUrl: string | null
+    ): Promise<void>
     {
-        await this.productRepository
-            .update({id}, updateProductDto)
-            .then((x: UpdateResult) => x.raw as Product);
+        if(photoUrl)
+        {
+            updateProductDto.link = `http://shop-b6zj.onrender.com/uploads/${photoUrl}`;
+            await this._updateWithPgoto(id, updateProductDto);
+        }
+        else
+        {
+            await this._updateWithPgoto(id, updateProductDto);
+        }
+        
     }
 
     async updateProduct(productFindOption: FindOptionsWhere<Product>, productUpdateData: QueryDeepPartialEntity<Product>): Promise<void>
     {
         await this.productRepository.update(productFindOption, productUpdateData);
+    }
+
+    private async _updateWithPgoto(
+        id: number,
+        updateProductDto: updateProductDto,
+    ): Promise<void>
+    {
+        await this.productRepository
+            .update({id}, updateProductDto)
+            .then((x: UpdateResult) => x.raw as Product);
     }
 
     private async _sort(sortFilete: string): Promise<FindOptionsOrder<Product>>

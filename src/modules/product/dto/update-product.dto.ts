@@ -6,7 +6,7 @@ export class updateProductDto
     readonly categoryId: number;
     readonly count: number;
     readonly price: number;
-
+    link: string
 }
 
 export class FindByIdDto {
