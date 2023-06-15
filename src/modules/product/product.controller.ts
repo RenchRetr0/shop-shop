@@ -100,4 +100,12 @@ export class ProductController {
       const id = +productId;
       return await this.productService.updateProductReqwest(id, updateProductDto);
     }
+
+    @Get('products/admin')
+    @UseGuards(JWTAuthGuard)
+    @RolesDecorator(Roles.ADMIN)
+    async admonProducts(): Promise<Product[]>
+    {
+      return await this.productService.findByProductForAdmin();
+    }
 }

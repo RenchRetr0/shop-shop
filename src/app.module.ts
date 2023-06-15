@@ -11,6 +11,7 @@ import { ProfileModule } from './modules/profile/profile.module';
 import { ProductModule } from './modules/product/product.module';
 import { CategoryModule } from './modules/category/category.module';
 import { OrderModule } from './modules/order/order.module';
+import { LikeModule } from './modules/like/like.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { OrderModule } from './modules/order/order.module';
     ProfileModule,
     ProductModule,
     CategoryModule,
-    OrderModule
+    OrderModule,
+    LikeModule
   ],
   controllers: [],
   providers: [],

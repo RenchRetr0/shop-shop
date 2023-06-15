@@ -60,6 +60,11 @@ export class ProductService
         return product;
     }
 
+    async findByProductForAdmin(): Promise<Product[]>
+    {
+        return await this.productRepository.find();
+    }
+
     async findById(id: number): Promise<Product>
     {
         return await this.productRepository.findOne({ where: {id: id}, relations: { category: true } });
@@ -67,7 +72,7 @@ export class ProductService
 
     async updateProductForOrder(id: number, count: number): Promise<void>
     {
-        await this.productRepository.update({id}, { count: count});
+        await this.productRepository.update({id}, {count: count});
     }
 
     async updateProductReqwest(id: number, updateProductDto: updateProductDto): Promise<void>
