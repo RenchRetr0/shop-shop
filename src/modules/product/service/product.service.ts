@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../entities/product.entity';
-import { FindOptionsOrder, FindOptionsWhere, MoreThan, Repository } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, MoreThan, Repository, UpdateResult } from 'typeorm';
 import { CategoryService } from '@category/service/category.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { Category } from '@category/entities/category.entity';
-import { sortFileteDto } from '@product/dto/sort-filter.dto';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { updateProductDto } from '@product/dto/update-product.dto';
 
 @Injectable()
 export class ProductService
@@ -64,9 +65,21 @@ export class ProductService
         return await this.productRepository.findOne({ where: {id: id}, relations: { category: true } });
     }
 
-    async updateProductForOrder(id: number, count: number)
+    async updateProductForOrder(id: number, count: number): Promise<void>
     {
-        await this.productRepository.update({id}, { count: count})
+        await this.productRepository.update({id}, { count: count});
+    }
+
+    async updateProductReqwest(id: number, updateProductDto: updateProductDto): Promise<void>
+    {
+        await this.productRepository
+            .update({id}, updateProductDto)
+            .then((x: UpdateResult) => x.raw as Product);
+    }
+
+    async updateProduct(productFindOption: FindOptionsWhere<Product>, productUpdateData: QueryDeepPartialEntity<Product>): Promise<void>
+    {
+        await this.productRepository.update(productFindOption, productUpdateData);
     }
 
     private async _sort(sortFilete: string): Promise<FindOptionsOrder<Product>>

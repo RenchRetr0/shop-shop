@@ -10,7 +10,7 @@ import {
     UploadedFile, 
     UseGuards, 
     UseInterceptors,
-    Res
+    Put
 } from '@nestjs/common';
 import { ProductService } from './service/product.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -24,6 +24,7 @@ import { Product } from './entities/product.entity';
 import { FindByCategoryDto } from './dto/findByCategory.dto';
 import { FindByProductIdDto } from './dto/findByProductId.dto';
 import { sortFileteDto } from './dto/sort-filter.dto';
+import { FindByIdDto, updateProductDto } from './dto/update-product.dto';
 
 @Controller('product')
 export class ProductController {
@@ -73,9 +74,30 @@ export class ProductController {
     }
 
     @Get('getOne/:productid')
-    async findOne(@Param() { productid }: FindByProductIdDto)
+    async findOne(@Param() { productid }: FindByProductIdDto): Promise<Product>
     {
       const id = +productid;
       return await this.productService.findById(id);
+    }
+
+    @Get('delete/:productid')
+    @UseGuards(JWTAuthGuard)
+    @RolesDecorator(Roles.ADMIN)
+    async delete(@Param() { productid }: FindByProductIdDto): Promise<void>
+    {
+      const id = +productid;
+      return await this.productService.updateProduct({id}, {count: 0});
+    }
+
+    @Put('update/:productId')
+    @UseGuards(JWTAuthGuard)
+    @RolesDecorator(Roles.ADMIN)
+    async update(
+      @Param() { productId }: FindByIdDto,
+      @Body() updateProductDto: updateProductDto
+    ): Promise<void>
+    {
+      const id = +productId;
+      return await this.productService.updateProductReqwest(id, updateProductDto);
     }
 }

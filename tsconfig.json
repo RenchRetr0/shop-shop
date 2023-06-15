@@ -24,6 +24,7 @@
       "@category/*": ["src/modules/category/*"],
       "@product/*": ["src/modules/product/*"],
       "@auth/*": ["src/modules/auth/*"],
+      "@order/*": ["src/modules/order/*"],
     }
   }
 }
