@@ -95,7 +95,7 @@ export class ProductService
     async findAllCatalog(productFilterQuery: FindOptionsWhere<Product>, sort: FindOptionsOrder<Product>): Promise<any>
     {
         return await this.productRepository
-            .find({ where: productFilterQuery, order: sort, relations: { category: true, like: true }})
+            .find({ where: productFilterQuery, order: sort, relations: { category: true, like: {user: true} }})
     }
 
     async findByProductForAdmin(): Promise<Product[]>
