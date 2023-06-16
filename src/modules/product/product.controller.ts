@@ -10,7 +10,8 @@ import {
     UploadedFile, 
     UseGuards, 
     UseInterceptors,
-    Put
+    Put,
+    Request
 } from '@nestjs/common';
 import { ProductService } from './service/product.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -25,6 +26,7 @@ import { FindByCategoryDto } from './dto/findByCategory.dto';
 import { FindByProductIdDto } from './dto/findByProductId.dto';
 import { sortFileteDto } from './dto/sort-filter.dto';
 import { FindByIdDto, updateProductDto } from './dto/update-product.dto';
+import { LikeProductDto } from './dto/like-product.dto';
 
 @Controller('product')
 export class ProductController {
@@ -73,6 +75,12 @@ export class ProductController {
       return this.productService.findByCategory(categoryIdNum, sortFilter);
     }
 
+    @Post('catalog')
+    async catalog(@Body() findByCategoryDto: FindByCategoryDto): Promise<Product[]>
+    {
+      return await this.productService.getCatalog(findByCategoryDto);
+    }
+
     @Get('getOne/:productid')
     async findOne(@Param() { productid }: FindByProductIdDto): Promise<Product>
     {
@@ -112,8 +120,18 @@ export class ProductController {
     @Get('products/admin')
     @UseGuards(JWTAuthGuard)
     @RolesDecorator(Roles.ADMIN)
-    async admonProducts(): Promise<Product[]>
+    async adminProducts(): Promise<Product[]>
     {
       return await this.productService.findByProductForAdmin();
+    }
+
+    @Post('like')
+    @UseGuards(JWTAuthGuard)
+    async addLike(@Body() likeProductDto: LikeProductDto, @Request() req)
+    {
+      const userId = +req.user.userId;
+      const productId = likeProductDto.productId;
+      const isLike = likeProductDto.isLike;
+      return await this.productService.addLikeProduct(productId, userId, isLike);
     }
 }

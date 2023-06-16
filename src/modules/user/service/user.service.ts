@@ -4,8 +4,6 @@ import { Profile } from '@profile/entities/profile.entity';
 import { CreateUserDto } from '@user/dto/create-user.dto';
 import { User } from '@user/entities/user.entity';
 import { UserWithCurrentEmailAlreadyExists } from '@user/errors/user-with-current-email-exists.error';
-import { profile } from 'console';
-import { OrderService } from 'src/modules/order/service/order.service';
 import { FindOptionsWhere, Like, Repository } from 'typeorm';
 
 @Injectable()

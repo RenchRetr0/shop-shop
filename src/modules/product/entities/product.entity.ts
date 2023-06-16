@@ -1,8 +1,9 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProductProperties } from "../interfaces/product.interface";
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { Category } from "@category/entities/category.entity";
 import { Type } from "class-transformer";
+import { Like } from "@like/entities/like.entity";
 
 @Entity('products')
 export class Product extends BaseEntity implements ProductProperties
@@ -60,4 +61,9 @@ export class Product extends BaseEntity implements ProductProperties
         length: 60,
     })
     link!: string;
+
+    @Type(() => Like)
+    @OneToMany(() => Like, (Like) => Like.product)
+    @JoinColumn()
+    like: Like;
 }

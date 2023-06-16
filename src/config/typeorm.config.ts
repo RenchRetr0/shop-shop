@@ -1,4 +1,5 @@
 import { Category } from '@category/entities/category.entity';
+import { Like } from '@like/entities/like.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   TypeOrmModuleAsyncOptions,
@@ -23,7 +24,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       username: configService.get<string>('APP_DB_USERNAME'),
       database: configService.get<string>('APP_DB_NAME'),
       password: configService.get<string>('APP_DB_PASSWORD'),
-      entities: [User, Profile, Product, Category, Order, OrderItem],
+      entities: [User, Profile, Product, Category, Order, OrderItem, Like],
       autoLoadEntities: true,
       synchronize: true,
       logging: false,

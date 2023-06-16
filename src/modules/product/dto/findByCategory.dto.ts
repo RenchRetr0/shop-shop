@@ -1,6 +1,7 @@
 
 export class FindByCategoryDto
 {
-    categoryId: string;
-    sortFilter: string;
+    categoryId?: number;
+    sortFilter?: string;
+    userId?: number;
 }

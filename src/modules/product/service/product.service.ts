@@ -7,6 +7,8 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { Category } from '@category/entities/category.entity';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { updateProductDto } from '@product/dto/update-product.dto';
+import { LikeService } from '@like/service/like.service';
+import { FindByCategoryDto } from '@product/dto/findByCategory.dto';
 
 @Injectable()
 export class ProductService
@@ -14,6 +16,7 @@ export class ProductService
     constructor (
         @InjectRepository(Product) private productRepository: Repository<Product>,
         private categoryService: CategoryService,
+        private likeService: LikeService,
     ) {}
 
     async create(
@@ -42,7 +45,7 @@ export class ProductService
         return await this.productRepository.find({ 
             where: { count: MoreThan(0) },
             order: sort, 
-            relations: { category: true } 
+            relations: { category: true, like: true } 
         });
     }
 
@@ -55,9 +58,29 @@ export class ProductService
                 category: { id }
             },
             order: sort,
-            relations: { category: true }
+            relations: { category: true, like: true }
         });
         return product;
+    }
+
+    async getCatalog(findByCategoryDto: FindByCategoryDto): Promise<Product[]>
+    {
+        const sort = await this._sort(findByCategoryDto.sortFilter);
+        const categoryId = findByCategoryDto.categoryId;
+        const userId = findByCategoryDto.userId;
+        return await this.findAllCatalog(
+            {
+                count: MoreThan(0),
+                category: { id: categoryId },
+                like: {user: {id: userId} }
+            },
+            sort
+        )
+    }
+
+    async findAllCatalog(productFilterQuery: FindOptionsWhere<Product>, sort: FindOptionsOrder<Product>): Promise<Product[]>
+    {
+        return await this.productRepository.find({ where: productFilterQuery, order: sort, relations: { category: true, like: true }});
     }
 
     async findByProductForAdmin(): Promise<Product[]>
@@ -96,6 +119,12 @@ export class ProductService
     async updateProduct(productFindOption: FindOptionsWhere<Product>, productUpdateData: QueryDeepPartialEntity<Product>): Promise<void>
     {
         await this.productRepository.update(productFindOption, productUpdateData);
+    }
+
+    async addLikeProduct(productId: number, userId: number, isLike: boolean)
+    {
+        const product = await this.findById(productId);
+        await this.likeService.like(product, userId, isLike);
     }
 
     private async _updateWithPgoto(
