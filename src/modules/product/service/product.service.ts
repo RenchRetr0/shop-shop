@@ -68,14 +68,28 @@ export class ProductService
         const sort = await this._sort(findByCategoryDto.sortFilter);
         const categoryId = findByCategoryDto.categoryId;
         const userId = findByCategoryDto.userId;
-        return await this.findAllCatalog(
-            {
-                count: MoreThan(0),
-                category: { id: categoryId },
-                like: {user: {id: userId} }
-            },
-            sort
-        )
+        if(userId)
+        {
+            return await this.findAllCatalog(
+                {
+                    count: MoreThan(0),
+                    category: { id: categoryId },
+                    like: {user: {id: userId} }
+                },
+                sort
+            );
+        }
+        else
+        {
+            return await this.findAllCatalog(
+                {
+                    count: MoreThan(0),
+                    category: { id: categoryId },
+                },
+                sort
+            )
+        }
+        
     }
 
     async findAllCatalog(productFilterQuery: FindOptionsWhere<Product>, sort: FindOptionsOrder<Product>): Promise<Product[]>
