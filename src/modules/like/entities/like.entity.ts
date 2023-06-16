@@ -10,7 +10,7 @@ export class Like extends BaseEntity
     id: number;
 
     @Type(() => User)
-    @OneToOne(() => User)
+    @ManyToOne(() => User)
     @JoinColumn()
     user: User;
 
