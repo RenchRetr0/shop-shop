@@ -74,7 +74,7 @@ export class ProductService
                 {
                     count: MoreThan(0),
                     category: { id: categoryId },
-                    like: {user: {id: userId} }
+                    like: {user: {id: userId} || null }
                 },
                 sort
             );
