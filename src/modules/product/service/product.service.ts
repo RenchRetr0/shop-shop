@@ -74,7 +74,7 @@ export class ProductService
                 {
                     count: MoreThan(0),
                     category: { id: categoryId },
-                    like: {user: {id: userId} || null }
+                    like: {user: {id: userId} } || null
                 },
                 sort
             );
@@ -92,9 +92,10 @@ export class ProductService
         
     }
 
-    async findAllCatalog(productFilterQuery: FindOptionsWhere<Product>, sort: FindOptionsOrder<Product>): Promise<Product[]>
+    async findAllCatalog(productFilterQuery: FindOptionsWhere<Product>, sort: FindOptionsOrder<Product>): Promise<any>
     {
-        return await this.productRepository.find({ where: productFilterQuery, order: sort, relations: { category: true, like: true }});
+        return await this.productRepository
+            .find({ where: productFilterQuery, order: sort, relations: { category: true, like: true }})
     }
 
     async findByProductForAdmin(): Promise<Product[]>
