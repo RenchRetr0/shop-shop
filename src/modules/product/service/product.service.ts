@@ -90,7 +90,7 @@ export class ProductService
 
     async findById(id: number): Promise<Product>
     {
-        return await this.productRepository.findOne({ where: {id: id}, relations: { category: true, comment: true } });
+        return await this.productRepository.findOne({ where: {id: id}, order: { comment: {id: 'DESC'}}, relations: { category: true, comment: true } });
     }
 
     async updateProductForOrder(id: number, count: number): Promise<void>

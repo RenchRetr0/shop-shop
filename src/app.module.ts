@@ -13,6 +13,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { OrderModule } from './modules/order/order.module';
 import { LikeModule } from './modules/like/like.module';
 import { CommentsModule } from './modules/comments/comments.module';
+import { FavoriteModule } from './modules/favorite/favorite.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { CommentsModule } from './modules/comments/comments.module';
     CategoryModule,
     OrderModule,
     LikeModule,
-    CommentsModule
+    CommentsModule,
+    FavoriteModule
   ],
   controllers: [],
   providers: [],

@@ -27,6 +27,7 @@
       "@order/*": ["src/modules/order/*"],
       "@like/*": ["src/modules/like/*"],
       "@comments/*": ["src/modules/comments/*"],
+      "@favorite/*": ["src/modules/favorite/*"],
     }
   }
 }

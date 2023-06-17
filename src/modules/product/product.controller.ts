@@ -24,7 +24,6 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
 import { FindByCategoryDto } from './dto/findByCategory.dto';
 import { FindByProductIdDto } from './dto/findByProductId.dto';
-import { sortFileteDto } from './dto/sort-filter.dto';
 import { FindByIdDto, updateProductDto } from './dto/update-product.dto';
 import { LikeProductDto } from './dto/like-product.dto';
 import { AddCommentDto } from './dto/add-comment.dto';
@@ -96,8 +95,7 @@ export class ProductController {
     async update(
       @Param() { productId }: FindByIdDto,
       @Body() updateProductDto: updateProductDto,
-      @UploadedFile(
-      )
+      @UploadedFile()
       file: Express.Multer.File | null,
     ): Promise<void>
     {
