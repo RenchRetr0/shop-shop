@@ -62,19 +62,6 @@ export class ProductController {
         );
     }
 
-    @Get(':sortFilter')
-    async findAll(@Param() { sortFilter }: sortFileteDto): Promise<Product[]>
-    {
-      return await this.productService.findAll(sortFilter);
-    }
-
-    @Get('felter/:categoryId/:sortFilter')
-    async findProduct(@Param() { categoryId, sortFilter}: FindByCategoryDto): Promise<Product[]>
-    {
-      const categoryIdNum = +categoryId;
-      return this.productService.findByCategory(categoryIdNum, sortFilter);
-    }
-
     @Post('catalog')
     async catalog(@Body() findByCategoryDto: FindByCategoryDto): Promise<Product[]>
     {

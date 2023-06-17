@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../entities/product.entity';
-import { FindOptionsOrder, FindOptionsWhere, MoreThan, Repository, UpdateResult } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, IsNull, MoreThan, Repository, UpdateResult } from 'typeorm';
 import { CategoryService } from '@category/service/category.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { Category } from '@category/entities/category.entity';
@@ -38,31 +38,6 @@ export class ProductService
         return await this.productRepository.save(product);
     }
 
-    async findAll(sortFilete: string): Promise<Product[]>
-    {
-        const sort = await this._sort(sortFilete);
-        
-        return await this.productRepository.find({ 
-            where: { count: MoreThan(0) },
-            order: sort, 
-            relations: { category: true, like: true } 
-        });
-    }
-
-    async findByCategory(id: number, sortFilete: string): Promise<Product[]>
-    {
-        const sort = await this._sort(sortFilete);
-        const product = await this.productRepository.find({
-            where: {
-                count: MoreThan(0),
-                category: { id }
-            },
-            order: sort,
-            relations: { category: true, like: true }
-        });
-        return product;
-    }
-
     async getCatalog(findByCategoryDto: FindByCategoryDto): Promise<Product[]>
     {
         const sort = await this._sort(findByCategoryDto.sortFilter);
@@ -74,7 +49,7 @@ export class ProductService
                 {
                     count: MoreThan(0),
                     category: { id: categoryId },
-                    like: {user: {id: userId && null} }
+                    like: {user: {id: userId} } && null
                 },
                 sort
             );
@@ -95,7 +70,7 @@ export class ProductService
     async findAllCatalog(productFilterQuery: FindOptionsWhere<Product>, sort: FindOptionsOrder<Product>): Promise<any>
     {
         return await this.productRepository
-            .find({ where: productFilterQuery, order: sort, relations: { category: true, like: {user: true} }})
+            .find({where: productFilterQuery, order: sort, relations: { category: true, like: {user: true} }})
     }
 
     async findByProductForAdmin(): Promise<Product[]>
