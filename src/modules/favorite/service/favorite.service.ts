@@ -29,7 +29,7 @@ export class FavoriteService
 
     async getAll(userId: number): Promise<Favorites[]>
     {
-        return await this.favoriteRepository.find({where: { user: {id: userId} } });
+        return await this.favoriteRepository.find({where: { user: {id: userId} }, relations: {product: true} });
     }
 
     async deleteFavorite(productId: number, userId: number): Promise<void>
