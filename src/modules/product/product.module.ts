@@ -6,12 +6,14 @@ import { ProductService } from './service/product.service';
 import { CategoryModule } from '@category/category.module';
 import { LikeModule } from '@like/like.module';
 import { CommentsModule } from '@comments/comments.module';
+import { UserModule } from '@user/user.module';
 
 @Module({
     imports: [
         CategoryModule,
         LikeModule,
         CommentsModule,
+        UserModule,
         TypeOrmModule.forFeature([Product])
     ],
     controllers: [ProductController],

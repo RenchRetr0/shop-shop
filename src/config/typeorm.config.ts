@@ -1,4 +1,5 @@
 import { Category } from '@category/entities/category.entity';
+import { Comment } from '@comments/entities/comment.entity';
 import { Like } from '@like/entities/like.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
