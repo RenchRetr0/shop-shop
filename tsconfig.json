@@ -26,6 +26,7 @@
       "@auth/*": ["src/modules/auth/*"],
       "@order/*": ["src/modules/order/*"],
       "@like/*": ["src/modules/like/*"],
+      "@comments/*": ["src/modules/comments/*"],
     }
   }
 }

@@ -27,6 +27,7 @@ import { FindByProductIdDto } from './dto/findByProductId.dto';
 import { sortFileteDto } from './dto/sort-filter.dto';
 import { FindByIdDto, updateProductDto } from './dto/update-product.dto';
 import { LikeProductDto } from './dto/like-product.dto';
+import { AddCommentDto } from './dto/add-comment.dto';
 
 @Controller('product')
 export class ProductController {
@@ -120,5 +121,15 @@ export class ProductController {
       const productId = likeProductDto.productId;
       const isLike = likeProductDto.isLike;
       return await this.productService.addLikeProduct(productId, userId, isLike);
+    }
+
+    @Post('comment')
+    @UseGuards(JWTAuthGuard)
+    async addComment(@Body() addCommentDto: AddCommentDto, @Request() req)
+    {
+      const userId = +req.user.userId;
+      const productId = addCommentDto.productId;
+      const comment = addCommentDto.comment;
+      return await this.productService.addComment(productId, userId, comment);
     }
 }

@@ -4,6 +4,7 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { Category } from "@category/entities/category.entity";
 import { Type } from "class-transformer";
 import { Like } from "@like/entities/like.entity";
+import { Comment } from "@comments/entities/comment.entity";
 
 @Entity('products')
 export class Product extends BaseEntity implements ProductProperties
@@ -66,4 +67,9 @@ export class Product extends BaseEntity implements ProductProperties
     @OneToMany(() => Like, (Like) => Like.product)
     @JoinColumn()
     like: Like;
+
+    @Type(() => Comment)
+    @OneToMany(() => Comment, (Comment) => Comment.product)
+    @JoinColumn()
+    comment: Comment;
 }

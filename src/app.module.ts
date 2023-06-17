@@ -12,6 +12,7 @@ import { ProductModule } from './modules/product/product.module';
 import { CategoryModule } from './modules/category/category.module';
 import { OrderModule } from './modules/order/order.module';
 import { LikeModule } from './modules/like/like.module';
+import { CommentsModule } from './modules/comments/comments.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { LikeModule } from './modules/like/like.module';
     ProductModule,
     CategoryModule,
     OrderModule,
-    LikeModule
+    LikeModule,
+    CommentsModule
   ],
   controllers: [],
   providers: [],

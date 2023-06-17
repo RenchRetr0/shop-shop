@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../entities/product.entity';
-import { FindOptionsOrder, FindOptionsWhere, IsNull, MoreThan, Repository, UpdateResult } from 'typeorm';
+import {
+    FindOptionsOrder,
+    FindOptionsWhere,
+    MoreThan,
+    Repository,
+    UpdateResult
+} from 'typeorm';
 import { CategoryService } from '@category/service/category.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { Category } from '@category/entities/category.entity';
@@ -9,6 +15,8 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { updateProductDto } from '@product/dto/update-product.dto';
 import { LikeService } from '@like/service/like.service';
 import { FindByCategoryDto } from '@product/dto/findByCategory.dto';
+import { CommentsService } from '@comments/service/comments.service';
+import { UserService } from '@user/service/user.service';
 
 @Injectable()
 export class ProductService
@@ -17,6 +25,8 @@ export class ProductService
         @InjectRepository(Product) private productRepository: Repository<Product>,
         private categoryService: CategoryService,
         private likeService: LikeService,
+        private userService: UserService,
+        private commentService: CommentsService,
     ) {}
 
     async create(
@@ -80,7 +90,7 @@ export class ProductService
 
     async findById(id: number): Promise<Product>
     {
-        return await this.productRepository.findOne({ where: {id: id}, relations: { category: true } });
+        return await this.productRepository.findOne({ where: {id: id}, relations: { category: true, comment: true } });
     }
 
     async updateProductForOrder(id: number, count: number): Promise<void>
@@ -115,6 +125,13 @@ export class ProductService
     {
         const product = await this.findById(productId);
         await this.likeService.like(product, userId, isLike);
+    }
+
+    async addComment(productId: number, userId: number, comment: string): Promise<void>
+    {
+        const user = await this.userService.findOne({id: userId});
+        const product = await this.findById(productId);
+        await this.commentService.createComment(product, user, comment);
     }
 
     private async _updateWithPgoto(
