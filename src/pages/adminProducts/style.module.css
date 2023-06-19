@@ -1,8 +1,0 @@
-.svg {
-  cursor: pointer;
-}
-
-.svg:hover > path {
-  transition: all .5s;
-  fill: #8B57C6;
-}
